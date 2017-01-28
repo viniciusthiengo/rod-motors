@@ -2,13 +2,10 @@ package br.com.thiengo.rodmotors.network;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-
 import br.com.thiengo.rodmotors.domain.Moto;
 import br.com.thiengo.rodmotors.mvp.MVP;
 import cz.msebera.android.httpclient.Header;
@@ -63,4 +60,3 @@ public class JsonHttpRequest extends JsonHttpResponseHandler {
         presenter.showProgressBar( false );
     }
 }
-

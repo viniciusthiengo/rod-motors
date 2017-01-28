@@ -6,18 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
-
 import br.com.thiengo.rodmotors.MainActivity;
 import br.com.thiengo.rodmotors.R;
 import br.com.thiengo.rodmotors.domain.Moto;
 
-/**
- * Created by viniciusthiengo on 26/01/17.
- */
 
 public class MotosAdapter extends RecyclerView.Adapter<MotosAdapter.ViewHolder> {
 
@@ -33,8 +27,8 @@ public class MotosAdapter extends RecyclerView.Adapter<MotosAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater
-                    .from( parent.getContext() )
-                    .inflate(R.layout.item_moto, parent, false);
+                .from( parent.getContext() )
+                .inflate(R.layout.item_moto, parent, false);
         ViewHolder viewHolder = new ViewHolder( view );
         return viewHolder;
     }
@@ -67,8 +61,8 @@ public class MotosAdapter extends RecyclerView.Adapter<MotosAdapter.ViewHolder> 
 
         private void setDados( Moto moto ){
             Picasso.with( ivMoto.getContext() )
-                .load( moto.getImagem() )
-                .into( ivMoto );
+                    .load( moto.getImagem() )
+                    .into( ivMoto );
 
             tvModelo.setText( moto.getModelo() );
             ivFavorito.setImageResource( moto.getEhFavoritoIcone() );
@@ -76,9 +70,7 @@ public class MotosAdapter extends RecyclerView.Adapter<MotosAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            Moto m = motos.get( getAdapterPosition() );
-            m.setEhFavorito( !m.isEhFavorito() );
-            activity.updateEhFavoritoMoto( m );
+            activity.updateEhFavoritoMoto( motos.get( getAdapterPosition() ) );
         }
     }
 }

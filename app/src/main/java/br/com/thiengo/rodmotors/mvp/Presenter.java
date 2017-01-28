@@ -3,37 +3,23 @@ package br.com.thiengo.rodmotors.mvp;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-
 import java.util.ArrayList;
-
 import br.com.thiengo.rodmotors.domain.Moto;
 
-/**
- * Created by viniciusthiengo on 27/01/17.
- */
 
 public class Presenter implements MVP.PresenterImpl {
 
-    private ArrayList<Moto> motos = new ArrayList<>();
     private MVP.ModelImpl model;
     private MVP.ViewImpl view;
+    private ArrayList<Moto> motos = new ArrayList<>();
 
     public Presenter(){
-        model = new Model(this);
+        model = new Model( this );
     }
 
     @Override
-    public void setView(MVP.ViewImpl view) {
+    public void setView( MVP.ViewImpl view ){
         this.view = view;
-    }
-
-    @Override
-    public void retrieveMotos( Bundle savedInstanceState ) {
-        if( savedInstanceState != null ){
-            motos = savedInstanceState.getParcelableArrayList( MVP.ViewImpl.MOTOS_KEY );
-            return;
-        }
-        model.retrieveMotos();
     }
 
     @Override
@@ -42,14 +28,29 @@ public class Presenter implements MVP.PresenterImpl {
     }
 
     @Override
-    public void showProgressBar(boolean status) {
-        int visibilidade = status ? View.VISIBLE : View.GONE;
-        view.showProgressBar( visibilidade );
+    public void retrieveMotos(Bundle savedInstanceState) {
+        if( savedInstanceState != null ){
+            motos = savedInstanceState.getParcelableArrayList( MVP.ViewImpl.MOTOS_KEY );
+            return;
+        }
+        model.retrieveMotos();
+    }
+
+    @Override
+    public void updateEhFavoritoMoto(Moto moto) {
+        moto.setEhFavorito( !moto.isEhFavorito() );
+        model.updateEhFavoritoMoto( moto );
     }
 
     @Override
     public void showToast(String mensagem) {
         view.showToast( mensagem );
+    }
+
+    @Override
+    public void showProgressBar(boolean status) {
+        int visibilidade = status ? View.VISIBLE : View.GONE;
+        view.showProgressBar( visibilidade );
     }
 
     @Override
@@ -60,18 +61,14 @@ public class Presenter implements MVP.PresenterImpl {
     }
 
     @Override
-    public void updateItemRecycler(Moto moto) {
+    public void updateItemRecycler(Moto m) {
         for( int i = 0; i < motos.size(); i++ ){
-            if( motos.get(i).getId() == moto.getId() ){
-                motos.get(i).setEhFavorito( moto.isEhFavorito() );
+            if( motos.get(i).getId() == m.getId() ){
+                motos.get(i).setEhFavorito( m.isEhFavorito() );
                 view.updateItemRecycler( i );
+                break;
             }
         }
-    }
-
-    @Override
-    public void updateEhFavoritoMoto(Moto moto) {
-        model.updateEhFavoritoMoto(moto);
     }
 
     @Override

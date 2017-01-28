@@ -6,13 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
-
 import br.com.thiengo.rodmotors.adapter.MotosAdapter;
 import br.com.thiengo.rodmotors.domain.Moto;
 import br.com.thiengo.rodmotors.mvp.MVP;
 import br.com.thiengo.rodmotors.mvp.Presenter;
 
+
 public class MainActivity extends AppCompatActivity implements MVP.ViewImpl {
+
 
     private MotosAdapter adapter;
     private static MVP.PresenterImpl presenter;

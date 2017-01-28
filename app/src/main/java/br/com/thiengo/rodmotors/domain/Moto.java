@@ -2,12 +2,8 @@ package br.com.thiengo.rodmotors.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import br.com.thiengo.rodmotors.R;
 
-/**
- * Created by viniciusthiengo on 26/01/17.
- */
 
 public class Moto implements Parcelable {
     public static final String ID_KEY = "id";
@@ -104,4 +100,3 @@ public class Moto implements Parcelable {
         }
     };
 }
-
