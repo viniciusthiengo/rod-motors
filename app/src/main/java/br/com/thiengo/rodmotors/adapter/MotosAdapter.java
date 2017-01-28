@@ -71,13 +71,7 @@ public class MotosAdapter extends RecyclerView.Adapter<MotosAdapter.ViewHolder> 
                 .into( ivMoto );
 
             tvModelo.setText( moto.getModelo() );
-
-            if( moto.isEhFavorito() ){
-                ivFavorito.setImageResource( R.drawable.ic_favorito_marcado );
-            }
-            else{
-                ivFavorito.setImageResource( R.drawable.ic_favorito );
-            }
+            ivFavorito.setImageResource( moto.getEhFavoritoIcone() );
         }
 
         @Override

@@ -5,24 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.Toast;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.RequestParams;
-
-import java.util.ArrayList;
 
 import br.com.thiengo.rodmotors.adapter.MotosAdapter;
 import br.com.thiengo.rodmotors.domain.Moto;
-import br.com.thiengo.rodmotors.network.JsonHttpRequest;
+import br.com.thiengo.rodmotors.mvp.MVP;
+import br.com.thiengo.rodmotors.mvp.Presenter;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String MOTOS_KEY = "motos";
+public class MainActivity extends AppCompatActivity implements MVP.ViewImpl {
 
     private MotosAdapter adapter;
-    private ArrayList<Moto> motos = new ArrayList<>();
-    private AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+    private static MVP.PresenterImpl presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +25,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        retrieveMotos( savedInstanceState );
+        if( presenter == null ){
+            presenter = new Presenter();
+        }
+        presenter.setView( this );
+        presenter.retrieveMotos( savedInstanceState );
     }
 
     @Override
@@ -45,62 +42,33 @@ public class MainActivity extends AppCompatActivity {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL);
         rvMotos.setLayoutManager( layoutManager );
 
-        adapter = new MotosAdapter( this, motos );
+        adapter = new MotosAdapter( this, presenter.getMotos() );
         rvMotos.setAdapter( adapter );
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(MOTOS_KEY, motos);
+        outState.putParcelableArrayList(MOTOS_KEY, presenter.getMotos());
         super.onSaveInstanceState(outState);
     }
 
-    private void retrieveMotos( Bundle savedInstanceState ){
-        if( savedInstanceState != null ){
-            motos = savedInstanceState.getParcelableArrayList( MOTOS_KEY );
-            return;
-        }
-
-        RequestParams requestParams = new RequestParams(JsonHttpRequest.METODO_KEY, "get-motos");
-        asyncHttpClient.post(this,
-                JsonHttpRequest.URI,
-                requestParams,
-                new JsonHttpRequest(this));
-    }
-
     public void updateEhFavoritoMoto( Moto moto ){
-        RequestParams requestParams = new RequestParams();
-        requestParams.put( JsonHttpRequest.METODO_KEY, "update-favorito-moto" );
-        requestParams.put( Moto.ID_KEY, moto.getId() );
-        requestParams.put( Moto.EH_FAVORITO_KEY, moto.isEhFavorito() );
-
-        asyncHttpClient.post(this,
-                JsonHttpRequest.URI,
-                requestParams,
-                new JsonHttpRequest(this));
+        presenter.updateEhFavoritoMoto( moto );
     }
 
-    public void updateListaRecycler( ArrayList<Moto> m ){
-        this.motos.clear();
-        this.motos.addAll( m );
+    public void updateListaRecycler(){
         adapter.notifyDataSetChanged();
     }
 
-    public void updateItemRecycler( Moto m ){
-        for( int i = 0; i < motos.size(); i++ ){
-            if( motos.get(i).getId() == m.getId() ){
-                motos.get(i).setEhFavorito( m.isEhFavorito() );
-                adapter.notifyItemChanged( i );
-            }
-        }
+    public void updateItemRecycler( int posicao ){
+        adapter.notifyItemChanged( posicao );
     }
 
     public void showToast( String mensagem ){
         Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show();
     }
 
-    public void showProgressBar( boolean status ){
-        int visibilidade = status ? View.VISIBLE : View.GONE;
+    public void showProgressBar( int visibilidade ){
         findViewById(R.id.pb_loading).setVisibility( visibilidade );
     }
 }

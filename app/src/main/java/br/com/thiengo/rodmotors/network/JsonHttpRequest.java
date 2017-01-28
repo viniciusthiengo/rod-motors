@@ -7,38 +7,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import br.com.thiengo.rodmotors.MainActivity;
 import br.com.thiengo.rodmotors.domain.Moto;
+import br.com.thiengo.rodmotors.mvp.MVP;
 import cz.msebera.android.httpclient.Header;
 
-/**
- * Created by viniciusthiengo on 26/01/17.
- */
 
 public class JsonHttpRequest extends JsonHttpResponseHandler {
     public static final String URI = "http://192.168.25.221:8888/rod-motors/ctrl/CtrlMoto.php";
     public static final String METODO_KEY = "metodo";
 
-    private WeakReference<MainActivity> activity;
+    private MVP.PresenterImpl presenter;
 
 
-    public JsonHttpRequest( MainActivity activity ){
-        this.activity = new WeakReference<>(activity);
+    public JsonHttpRequest( MVP.PresenterImpl presenter ){
+        this.presenter = presenter;
     }
 
     @Override
     public void onStart() {
-        activity.get().showProgressBar( true );
+        presenter.showProgressBar( true );
     }
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
         Gson gson = new Gson();
         Moto m = gson.fromJson( response.toString(), Moto.class );
-        activity.get().updateItemRecycler( m );
+        presenter.updateItemRecycler( m );
     }
 
     @Override
@@ -54,16 +50,17 @@ public class JsonHttpRequest extends JsonHttpResponseHandler {
             }
             catch(JSONException e){}
         }
-        activity.get().updateListaRecycler( motos );
+        presenter.updateListaRecycler( motos );
     }
 
     @Override
     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-        activity.get().showToast( responseString );
+        presenter.showToast( responseString );
     }
 
     @Override
     public void onFinish() {
-        activity.get().showProgressBar( false );
+        presenter.showProgressBar( false );
     }
 }
+

@@ -3,6 +3,8 @@ package br.com.thiengo.rodmotors.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import br.com.thiengo.rodmotors.R;
+
 /**
  * Created by viniciusthiengo on 26/01/17.
  */
@@ -57,6 +59,13 @@ public class Moto implements Parcelable {
         this.ehFavorito = ehFavorito;
     }
 
+    public int getEhFavoritoIcone(){
+        if( isEhFavorito() ){
+            return R.drawable.ic_favorito_marcado;
+        }
+        return R.drawable.ic_favorito;
+    }
+
 
     @Override
     public int describeContents() {
@@ -95,3 +104,4 @@ public class Moto implements Parcelable {
         }
     };
 }
+
