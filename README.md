@@ -10,7 +10,7 @@ O MVP, para ambiente mobile, permite a fácil separação de conceitos em três 
 
 O conteúdo do artigo também está disponível em [vídeo](https://www.thiengo.com.br/mvp-android#title-20).
 
-### Lado Web
+### Lado Web ⚠
 
 Saiba que o projeto Android deste conteúdo sobre o padrão MVP também tem o lado Web. Alias, o lado Web deve ser primeiro desenvolvido do que o lado Android, exatamente como apresentado em artigo.
 
